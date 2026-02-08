@@ -121,7 +121,7 @@ export class ManageParticipantsComponent implements OnInit, OnDestroy {
             p.profile.full_name,
             p.profile.email,
             format(new Date(p.registered_at), 'yyyy-MM-dd HH:mm'),
-            this.getSelectedEvent()?.title || ''
+            p.event_title || this.getSelectedEvent()?.title || ''
         ]);
 
         const csvContent = [

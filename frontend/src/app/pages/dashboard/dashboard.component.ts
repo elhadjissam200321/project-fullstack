@@ -102,11 +102,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoadingEvents = true;
         this.eventService.getEventsByOrganiser(userId).pipe(
             takeUntil(this.destroy$),
-            map(events => events
-                .filter(e => new Date(e.event_date) > new Date())
-                .sort((a, b) => new Date(a.event_date).getTime() - new Date(b.event_date).getTime())
-                .slice(0, 8)
-            )
+            map(events => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Start of today
+
+                return events
+                    .filter(e => new Date(e.event_date) >= today)
+                    .sort((a, b) => new Date(a.event_date).getTime() - new Date(b.event_date).getTime())
+                    .slice(0, 8);
+            })
         ).subscribe({
             next: (events) => {
                 this.upcomingEvents = events;

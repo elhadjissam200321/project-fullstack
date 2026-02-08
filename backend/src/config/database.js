@@ -1,8 +1,11 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
+const config = require('./env');
 
-const dbPath = path.resolve(__dirname, '../../database.sqlite');
+const dbPath = path.isAbsolute(config.databasePath)
+    ? config.databasePath
+    : path.resolve(__dirname, '../../', config.databasePath);
 const dbDir = path.dirname(dbPath);
 
 // Ensure the directory exists

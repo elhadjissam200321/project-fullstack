@@ -4,7 +4,7 @@ module.exports = {
     port: process.env.PORT || 3000,
     jwtSecret: process.env.JWT_SECRET || 'fallback-secret-key',
     jwtExpiry: process.env.JWT_EXPIRY || '24h',
-    databasePath: process.env.DATABASE_PATH || './database/academeet.db',
+    databasePath: process.env.DATABASE_PATH || 'database.sqlite',
     nodeEnv: process.env.NODE_ENV || 'development',
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:4200'
 };

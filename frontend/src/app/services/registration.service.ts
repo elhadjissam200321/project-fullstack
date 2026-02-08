@@ -37,6 +37,7 @@ export class RegistrationService {
         return this.http.get<{ registrations: any[] }>(`${this.apiUrl}/registrations/event/${eventId}`).pipe(
             map(response => response.registrations.map(r => ({
                 ...r,
+                registered_at: r.created_at,
                 profile: {
                     full_name: r.full_name || `${r.first_name || ''} ${r.last_name || ''}`.trim(),
                     email: r.email,
@@ -50,6 +51,7 @@ export class RegistrationService {
         return this.http.get<{ registrations: any[] }>(`${this.apiUrl}/registrations/organiser`).pipe(
             map(response => response.registrations.map(r => ({
                 ...r,
+                registered_at: r.created_at,
                 profile: {
                     full_name: r.full_name || `${r.first_name || ''} ${r.last_name || ''}`.trim(),
                     email: r.email,

@@ -238,11 +238,11 @@ export class EventFormDialogComponent implements OnInit, OnChanges {
     const eventData = {
       title: formValue.title,
       description: formValue.description,
-      event_date: eventDate.toISOString(),
+      eventDate: eventDate.toISOString(),
       location: formValue.location,
       capacity: formValue.capacity,
       category: formValue.category,
-      image_url: formValue.image_url || undefined
+      imageUrl: formValue.image_url || undefined
     };
 
     const request$ = (this.isEditing && this.eventId)

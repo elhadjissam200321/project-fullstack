@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -21,7 +21,8 @@ export class LoginComponent implements OnInit {
         private fb: FormBuilder,
         private authService: AuthService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private cdr: ChangeDetectorRef
     ) {
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -59,16 +60,19 @@ export class LoginComponent implements OnInit {
         this.authService.signIn({ email, password }).subscribe({
             next: () => {
                 this.router.navigate([this.returnUrl]);
+                this.cdr.detectChanges();
             },
             error: (error) => {
                 this.isLoading = false;
                 this.errorMessage = error.message === 'Invalid login credentials'
                     ? 'Email ou mot de passe incorrect'
                     : error.message || 'Une erreur est survenue lors de la connexion';
+                this.cdr.detectChanges();
             },
             complete: () => {
                 // This might not fire if navigation happens in next, but safe to keep
                 this.isLoading = false;
+                this.cdr.detectChanges();
             }
         });
     }

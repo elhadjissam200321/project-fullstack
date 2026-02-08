@@ -69,10 +69,12 @@ export class ManageEventsComponent implements OnInit, OnDestroy {
                 this.events = events;
                 this.applyFilter();
                 this.isLoading = false;
+                this.cdr.detectChanges();
             },
             error: (error) => {
                 this.errorMessage = 'Erreur lors du chargement des événements';
                 this.isLoading = false;
+                this.cdr.detectChanges();
             }
         });
     }

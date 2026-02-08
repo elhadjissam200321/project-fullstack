@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '../../services/event.service';
+import { AuthService } from '../../services/auth.service';
 import { EventWithStats } from '../../models/models';
 import { EventCardComponent } from '../../components/event-card.component';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-home',
@@ -22,14 +23,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     searchQuery = '';
     selectedCategory = 'all';
     private destroy$ = new Subject<void>();
+    public isAuthenticated$: Observable<boolean>;
 
     displayedEvents: EventWithStats[] = [];
     itemsToShow = 9;
 
     constructor(
         private eventService: EventService,
+        private authService: AuthService,
         private cdr: ChangeDetectorRef
-    ) { }
+    ) {
+        this.isAuthenticated$ = this.authService.isAuthenticated$;
+    }
 
     ngOnInit() {
         this.loadEvents();

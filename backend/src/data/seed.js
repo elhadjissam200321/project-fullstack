@@ -1,6 +1,6 @@
 const database = require('../config/database');
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { defaultPassword } = require('./sample-accounts');
 const { sampleEventImages, sampleEvents } = require('./sample-events');
 

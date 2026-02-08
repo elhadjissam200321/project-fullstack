@@ -72,11 +72,11 @@ export interface DashboardStats {
 export interface CreateEventData {
     title: string;
     description: string;
-    event_date: string;
+    eventDate: string;
     location: string;
     capacity: number;
     category?: EventCategory;
-    image_url?: string;
+    imageUrl?: string;
 }
 
 export interface UpdateEventData extends Partial<CreateEventData> {

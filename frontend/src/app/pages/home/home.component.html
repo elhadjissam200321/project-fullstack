@@ -23,7 +23,7 @@
         </p>
 
         <!-- CTA Button -->
-        <div class="mt-8">
+        <div class="mt-8" *ngIf="!(isAuthenticated$ | async)">
           <a routerLink="/register"
             class="inline-flex items-center h-14 px-8 btn-accent shadow-lg rounded-lg font-semibold">
             Rejoindre
@@ -236,7 +236,7 @@
   </section>
 
   <!-- CTA Banner -->
-  <section class="py-20 bg-primary text-primary-foreground">
+  <section class="py-20 bg-primary text-primary-foreground" *ngIf="!(isAuthenticated$ | async)">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto">
         <h2 class="text-3xl md:text-4xl font-bold mb-4">

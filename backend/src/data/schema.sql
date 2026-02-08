@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     user_id TEXT UNIQUE NOT NULL,
     full_name TEXT NOT NULL,
     role TEXT CHECK(role IN ('organisateur', 'participant', 'super_admin')) NOT NULL,
+    avatar_url TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

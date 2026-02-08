@@ -20,4 +20,4 @@ Thumbs.db
 
 # Exclude Rapport and Documents (as requested)
 /rapport/
-/*.zip
+**/*.zip

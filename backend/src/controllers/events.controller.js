@@ -56,9 +56,11 @@ async function getEventById(req, res) {
 // Create new event
 async function createEvent(req, res) {
     try {
-        const { title, description, location, category, capacity, eventDate, imageUrl } = req.body;
+        const { title, description, location, category, capacity, eventDate, event_date, imageUrl, image_url } = req.body;
+        const finalEventDate = eventDate || event_date;
+        const finalImageUrl = imageUrl || image_url;
 
-        if (!title || !location || !capacity || !eventDate) {
+        if (!title || !location || !capacity || !finalEventDate) {
             return res.status(400).json({ error: 'Required fields are missing' });
         }
 
@@ -68,8 +70,8 @@ async function createEvent(req, res) {
             location,
             category,
             capacity: parseInt(capacity),
-            eventDate,
-            imageUrl,
+            eventDate: finalEventDate,
+            imageUrl: finalImageUrl,
             createdBy: req.user.id
         });
 
@@ -82,8 +84,8 @@ async function createEvent(req, res) {
                 location,
                 category,
                 capacity: parseInt(capacity),
-                event_date: eventDate,
-                image_url: imageUrl,
+                event_date: finalEventDate,
+                image_url: finalImageUrl,
                 registrationCount: 0,
                 availableSpots: parseInt(capacity)
             }
@@ -97,7 +99,9 @@ async function createEvent(req, res) {
 async function updateEvent(req, res) {
     try {
         const { id } = req.params;
-        const { title, description, location, category, capacity, eventDate, imageUrl } = req.body;
+        const { title, description, location, category, capacity, eventDate, event_date, imageUrl, image_url } = req.body;
+        const finalEventDate = eventDate || event_date;
+        const finalImageUrl = imageUrl || image_url;
 
         const event = await Event.findById(database, id);
         if (!event) {
@@ -114,8 +118,8 @@ async function updateEvent(req, res) {
             location,
             category,
             capacity: capacity ? parseInt(capacity) : undefined,
-            eventDate,
-            imageUrl
+            eventDate: finalEventDate,
+            imageUrl: finalImageUrl
         });
 
         // Optimization: Return updated data directly to minimize latency
@@ -127,8 +131,8 @@ async function updateEvent(req, res) {
                 location: location || event.location,
                 category: category || event.category,
                 capacity: capacity ? parseInt(capacity) : event.capacity,
-                event_date: eventDate || event.event_date,
-                image_url: imageUrl !== undefined ? imageUrl : event.image_url
+                event_date: finalEventDate || event.event_date,
+                image_url: finalImageUrl !== undefined ? finalImageUrl : event.image_url
             }
         });
     } catch (error) {
