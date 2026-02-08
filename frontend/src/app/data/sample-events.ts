@@ -1,0 +1,261 @@
+export const sampleEventImages = {
+    conference: 'https://images.unsplash.com/photo-1540575861501-7ad0582371f3?q=80&w=2070&auto=format&fit=crop',
+    workshop: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop',
+    festival: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070&auto=format&fit=crop',
+    meetup: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop',
+    gala: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=2070&auto=format&fit=crop',
+    webinar: 'https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?q=80&w=2070&auto=format&fit=crop',
+    hackathon: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop',
+    networking: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2070&auto=format&fit=crop',
+    seminar: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop',
+    concert: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070&auto=format&fit=crop',
+};
+
+export const sampleEvents = [
+    // Tech & Innovation Events
+    {
+        title: "Conférence Tech Casablanca 2026 - L'Avenir du Digital au Maroc",
+        description: `Rejoignez-nous pour la plus grande conférence technologique du Maroc ! Au programme : IA, Cloud Computing, Cybersécurité, et l'avenir du développement web. Intervenants internationaux, ateliers pratiques, et opportunités de networking exceptionnelles.`,
+        location: "Technopark Casablanca, Route de Nouaceur",
+        capacity: 500,
+        daysFromNow: 7,
+        image: 'conference',
+        category: 'conference',
+    },
+    {
+        title: "Hackathon IA & Machine Learning - École 1337",
+        description: `48h de code intensif ! Développez des solutions innovantes utilisant l'IA et le ML. Prix : 50,000 DH pour l'équipe gagnante. Mentors experts, API gratuites, et repas fournis.`,
+        location: "École 1337 Khouribga",
+        capacity: 120,
+        daysFromNow: 14,
+        image: 'hackathon',
+        category: 'hackathon',
+    },
+    {
+        title: "Atelier Développement Web Full-Stack avec React & Node.js",
+        description: `Formation intensive de 2 jours sur le développement web moderne. Apprenez React, Node.js, MongoDB, et déployez votre première application complète. Certificat de participation inclus.`,
+        location: "École 1337 Khouribga",
+        capacity: 40,
+        daysFromNow: 3,
+        image: 'workshop',
+        category: 'workshop',
+    },
+    {
+        title: "Webinaire: DevOps & Cloud Computing avec AWS",
+        description: `Session en ligne interactive sur les meilleures pratiques DevOps. Découvrez Docker, Kubernetes, CI/CD, et les services AWS. Q&A en direct avec des experts certifiés.`,
+        location: "En ligne (Zoom)",
+        capacity: 300,
+        daysFromNow: 5,
+        image: 'webinar',
+        category: 'webinar',
+    },
+    {
+        title: "Meetup Développeurs JavaScript Rabat",
+        description: `Rencontre mensuelle des développeurs JS du Maroc. Présentations lightning talks, partage d'expériences, et networking autour d'un café. Tous niveaux bienvenus !`,
+        location: "Café Coworking Rabat, Agdal",
+        capacity: 60,
+        daysFromNow: 2,
+        image: 'meetup',
+        category: 'meetup',
+    },
+
+    // Business & Entrepreneurship
+    {
+        title: "Sommet Entrepreneuriat Maroc 2026",
+        description: `Le plus grand rassemblement d'entrepreneurs du royaume ! Pitch sessions, panels d'investisseurs, masterclasses, et opportunités de financement. Plus de 100 startups participantes.`,
+        location: "Palais des Congrès, Marrakech",
+        capacity: 800,
+        daysFromNow: 21,
+        image: 'conference',
+        category: 'conference',
+    },
+    {
+        title: "Atelier Stratégie Marketing Digital 2026",
+        description: `Maîtrisez les dernières techniques de marketing digital : SEO, SEM, Social Media, Content Marketing, et Analytics. Cas pratiques et outils professionnels.`,
+        location: "Centre de Formation Casablanca",
+        capacity: 50,
+        daysFromNow: 10,
+        image: 'workshop',
+        category: 'workshop',
+    },
+    {
+        title: "Networking Business Leaders Casablanca",
+        description: `Soirée exclusive de networking pour dirigeants et entrepreneurs. Échanges B2B, opportunités de partenariats, et cocktail dînatoire dans un cadre prestigieux.`,
+        location: "Hôtel Sofitel Casablanca",
+        capacity: 150,
+        daysFromNow: 12,
+        image: 'networking',
+        category: 'networking',
+    },
+
+    // Culture & Arts
+    {
+        title: "Festival Gnaoua et Musiques du Monde - Essaouira 2026",
+        description: `Le légendaire Festival Gnaoua revient avec une programmation exceptionnelle ! 3 jours de concerts gratuits, fusion musicale, et célébration de la culture gnaoua. Artistes internationaux et locaux.`,
+        location: "Place Moulay Hassan, Essaouira",
+        capacity: 5000,
+        daysFromNow: 45,
+        image: 'festival',
+        category: 'festival',
+    },
+    {
+        title: "Concert Symphonique - Orchestre Philharmonique du Maroc",
+        description: `Soirée exceptionnelle avec l'Orchestre Philharmonique du Maroc. Au programme : Mozart, Beethoven, et compositions marocaines contemporaines. Tenue de soirée recommandée.`,
+        location: "Théâtre Mohammed V, Rabat",
+        capacity: 600,
+        daysFromNow: 18,
+        image: 'concert',
+        category: 'concert',
+    },
+    {
+        title: "Exposition Art Contemporain Marocain",
+        description: `Vernissage de l'exposition collective d'artistes marocains émergents. Peinture, sculpture, photographie, et installations. Cocktail d'ouverture et rencontre avec les artistes.`,
+        location: "Galerie d'Art Contemporain, Casablanca",
+        capacity: 200,
+        daysFromNow: 8,
+        image: 'gala',
+        category: 'gala',
+    },
+
+    // Education & Training
+    {
+        title: "Séminaire Leadership & Management Moderne",
+        description: `Formation intensive sur le leadership du 21ème siècle. Techniques de management agile, intelligence émotionnelle, et gestion d'équipes multiculturelles. Certification incluse.`,
+        location: "Centre de Formation Professionnelle, Rabat",
+        capacity: 80,
+        daysFromNow: 15,
+        image: 'seminar',
+        category: 'seminar',
+    },
+    {
+        title: "Atelier Design Thinking & Innovation",
+        description: `Apprenez la méthodologie Design Thinking pour résoudre des problèmes complexes. Exercices pratiques, brainstorming, prototypage rapide. Animé par des experts certifiés.`,
+        location: "Innovation Hub Casablanca",
+        capacity: 35,
+        daysFromNow: 6,
+        image: 'workshop',
+        category: 'workshop',
+    },
+    {
+        title: "Webinaire: Gestion de Projet Agile & Scrum",
+        description: `Session en ligne complète sur les méthodologies agiles. Scrum, Kanban, sprints, et outils de gestion. Idéal pour chefs de projet et développeurs.`,
+        location: "En ligne (Microsoft Teams)",
+        capacity: 250,
+        daysFromNow: 4,
+        image: 'webinar',
+        category: 'webinar',
+    },
+
+    // Sports & Wellness
+    {
+        title: "Marathon International de Marrakech 2026",
+        description: `Participez au marathon le plus spectaculaire du Maroc ! Parcours à travers la médina, les jardins, et la palmeraie. 42km, semi-marathon, et course 10km. Médailles et t-shirts pour tous.`,
+        location: "Départ: Place Jemaa el-Fna, Marrakech",
+        capacity: 3000,
+        daysFromNow: 60,
+        image: 'festival',
+        category: 'sport',
+    },
+    {
+        title: "Retraite Yoga & Méditation - Atlas Mountains",
+        description: `Week-end de ressourcement dans les montagnes de l'Atlas. Yoga quotidien, méditation, randonnées, cuisine bio, et hébergement en écolodge. Tous niveaux acceptés.`,
+        location: "Écolodge Atlas, Imlil",
+        capacity: 25,
+        daysFromNow: 20,
+        image: 'workshop',
+        category: 'wellness',
+    },
+
+    // Food & Gastronomy
+    {
+        title: "Festival Gastronomique de Fès - Saveurs du Maroc",
+        description: `Célébration de la cuisine marocaine traditionnelle et moderne. Démonstrations de chefs, dégustations, ateliers culinaires, et marché de produits du terroir.`,
+        location: "Palais Jamaï, Fès",
+        capacity: 400,
+        daysFromNow: 30,
+        image: 'festival',
+        category: 'food',
+    },
+    {
+        title: "Atelier Cuisine Marocaine Traditionnelle",
+        description: `Apprenez à préparer les grands classiques : tajine, couscous, pastilla, et pâtisseries orientales. Cours pratique avec chef professionnel. Dégustation incluse.`,
+        location: "École de Cuisine Dar Hatim, Marrakech",
+        capacity: 20,
+        daysFromNow: 9,
+        image: 'workshop',
+        category: 'workshop',
+    },
+
+    // Science & Environment
+    {
+        title: "Conférence Développement Durable & Énergies Renouvelables",
+        description: `Sommet national sur la transition énergétique au Maroc. Experts internationaux, projets solaires et éoliens, innovations vertes, et opportunités d'investissement.`,
+        location: "Centre de Conférences, Casablanca",
+        capacity: 350,
+        daysFromNow: 25,
+        image: 'conference',
+        category: 'conference',
+    },
+    {
+        title: "Atelier Protection de l'Environnement Marin",
+        description: `Journée de sensibilisation et nettoyage des plages. Conférences sur la biodiversité marine, ateliers pour enfants, et actions concrètes pour la protection des océans.`,
+        location: "Plage Ain Diab, Casablanca",
+        capacity: 200,
+        daysFromNow: 11,
+        image: 'workshop',
+        category: 'environment',
+    },
+
+    // Fashion & Design
+    {
+        title: "Caftan Fashion Show - Marrakech 2026",
+        description: `Défilé de mode exceptionnel présentant les créations des plus grands stylistes marocains. Caftans traditionnels revisités, fusion moderne-traditionnel. Soirée de gala.`,
+        location: "Palais Bahia, Marrakech",
+        capacity: 300,
+        daysFromNow: 35,
+        image: 'gala',
+        category: 'fashion',
+    },
+
+    // Community & Social
+    {
+        title: "Journée Portes Ouvertes - Associations Caritatives",
+        description: `Découvrez le travail des associations locales. Stands d'information, activités pour enfants, collecte de dons, et opportunités de bénévolat. Entrée gratuite.`,
+        location: "Parc de la Ligue Arabe, Casablanca",
+        capacity: 1000,
+        daysFromNow: 13,
+        image: 'meetup',
+        category: 'social',
+    },
+
+    // Entertainment
+    {
+        title: "Festival du Rire - Stand-Up Comedy Maroc",
+        description: `Soirée hilarante avec les meilleurs humoristes marocains et internationaux. 4 heures de spectacle, plusieurs scènes, et ambiance festive garantie !`,
+        location: "Complexe Culturel, Casablanca",
+        capacity: 800,
+        daysFromNow: 22,
+        image: 'concert',
+        category: 'entertainment',
+    },
+
+    // Past Events (for testing history)
+    {
+        title: "Conférence IA & Big Data - Édition Passée",
+        description: `Événement passé pour tester l'affichage historique. Grande conférence sur l'intelligence artificielle et le traitement de données massives.`,
+        location: "Technopark Casablanca",
+        capacity: 400,
+        daysFromNow: -10,
+        image: 'conference',
+        category: 'conference',
+    },
+    {
+        title: "Hackathon Fintech - Édition Précédente",
+        description: `Événement terminé. Hackathon sur les technologies financières avec participation de 80 développeurs et 15 équipes.`,
+        location: "Innovation Lab Rabat",
+        capacity: 100,
+        daysFromNow: -5,
+        image: 'hackathon',
+        category: 'hackathon',
+    },
+];

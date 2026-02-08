@@ -1,0 +1,144 @@
+<div class="space-y-6 animate-in fade-in duration-500">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Événements</h1>
+            <p class="text-muted-foreground mt-1">
+                Gérez vos événements et suivez les inscriptions
+            </p>
+        </div>
+        <button (click)="openCreate()" class="btn-accent px-4 py-2 rounded-lg font-medium flex items-center gap-2">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Créer un événement
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="space-y-4">
+        <div *ngFor="let i of [1,2,3]" class="bg-card rounded-xl p-6 border border-border animate-pulse">
+            <div class="flex items-center gap-4">
+                <div class="h-16 w-16 bg-muted rounded-lg"></div>
+                <div class="flex-1">
+                    <div class="h-5 w-48 bg-muted rounded mb-2"></div>
+                    <div class="h-4 w-32 bg-muted rounded"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isLoading && errorMessage" class="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+        <p class="text-destructive">{{ errorMessage }}</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && events.length === 0"
+        class="bg-card rounded-xl border border-border flex flex-col items-center justify-center py-16">
+        <svg class="h-16 w-16 text-muted-foreground/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <h3 class="mt-4 text-lg font-medium">Aucun événement</h3>
+        <p class="mt-2 text-muted-foreground text-center max-w-sm">
+            Vous n'avez pas encore créé d'événement. Commencez par en créer un !
+        </p>
+        <button (click)="openCreate()" class="mt-4 btn-accent px-4 py-2 rounded-lg font-medium flex items-center gap-2">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Créer mon premier événement
+        </button>
+    </div>
+
+    <!-- Search Empty State -->
+    <div *ngIf="!isLoading && events.length > 0 && filteredEvents.length === 0"
+        class="bg-card rounded-xl border border-border flex flex-col items-center justify-center py-16">
+        <svg class="h-12 w-12 text-muted-foreground/40 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <h3 class="text-lg font-medium">Aucun résultat</h3>
+        <p class="text-muted-foreground">Aucun événement ne correspond à "{{ searchQuery }}"</p>
+    </div>
+
+    <!-- Events List -->
+    <div *ngIf="!isLoading && filteredEvents.length > 0" class="space-y-4">
+        <div *ngFor="let event of filteredEvents"
+            class="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-all group">
+            <div class="flex items-start gap-4">
+                <!-- Date badge -->
+                <div
+                    class="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
+                    <span class="text-2xl font-bold">{{ getDay(event.event_date) }}</span>
+                    <span class="text-xs uppercase font-medium">{{ getMonth(event.event_date) }}</span>
+                </div>
+
+                <!-- Event info -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <h3 class="font-semibold text-lg hover:text-accent transition-colors">
+                                <a [routerLink]="['/events', event.id]">{{ event.title }}</a>
+                            </h3>
+                            <p class="text-sm text-muted-foreground mt-1">
+                                {{ formatDate(event.event_date) }}
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span *ngIf="isPast(event.event_date)"
+                                class="px-2 py-0.5 rounded text-xs font-medium bg-secondary text-secondary-foreground">Terminé</span>
+                            <span *ngIf="!isPast(event.event_date) && isFull(event)"
+                                class="px-2 py-0.5 rounded text-xs font-medium bg-destructive text-destructive-foreground">Complet</span>
+
+                            <!-- Action buttons -->
+                            <div class="flex items-center gap-1 border-l pl-2 border-border ml-2">
+                                <button (click)="openEdit(event.id)"
+                                    class="p-2 text-muted-foreground hover:text-accent hover:bg-accent/10 rounded-lg transition-colors"
+                                    title="Modifier">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                </button>
+                                <button (click)="deleteEvent(event.id)"
+                                    class="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                                    title="Supprimer">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 mt-3">
+                        <div class="flex items-center gap-1 text-sm text-muted-foreground">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>{{ event.participant_count }}/{{ event.capacity }} participants</span>
+                        </div>
+                        <span class="text-muted-foreground">•</span>
+                        <div class="flex items-center gap-1 text-sm text-muted-foreground">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>{{ event.location }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Form Dialog -->
+    <app-event-form-dialog [open]="isCreateOpen" [eventId]="editEventId" [event]="selectedEvent"
+        (openChange)="onDialogClose($event)" (saved)="loadEvents()">
+    </app-event-form-dialog>
+</div>

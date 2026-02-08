@@ -1,0 +1,212 @@
+<div class="space-y-10 min-h-0 page-enter">
+    <!-- Top Banner / Navigation Context -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-border/40">
+        <div class="space-y-1">
+            <h1 class="text-4xl font-black tracking-tight text-foreground">
+                Aperçu Global
+            </h1>
+            <p class="text-sm font-medium text-muted-foreground uppercase tracking-widest">
+                {{ stats?.total_events || 0 }} Événements actifs • {{ stats?.total_participants || 0 }} Participants
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <app-seed-data-button></app-seed-data-button>
+            <app-clear-demo-data-button></app-clear-demo-data-button>
+            <div class="h-10 w-[1px] bg-border/50 mx-2 hidden md:block"></div>
+            <button routerLink="/dashboard/events"
+                class="btn-accent px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-accent/20">
+                <lucide-icon name="plus" class="h-4 w-4"></lucide-icon>
+                Nouvel Événement
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <ng-container *ngIf="isLoading; else statsLoaded">
+            <div *ngFor="let i of [1,2,3,4]" class="glass-card h-40 rounded-2xl animate-pulse"></div>
+        </ng-container>
+
+        <ng-template #statsLoaded>
+            <app-stat-card title="Total Événements" [value]="stats?.total_events || 0" iconName="calendar" [delay]="0"
+                description="Gérés"></app-stat-card>
+
+            <app-stat-card title="Participants" [value]="stats?.total_participants || 0" iconName="users" [delay]="100"
+                [trend]="{ value: 12, isPositive: true }" description="Uniques"></app-stat-card>
+
+            <app-stat-card title="À Venir" [value]="stats?.upcoming_events || 0" iconName="clock" [delay]="200"
+                description="Programmés"></app-stat-card>
+
+            <app-stat-card title="Inscriptions" [value]="getTrendCount()" iconName="trending-up" [delay]="300"
+                [trend]="{ value: 24, isPositive: true }" description="7 derniers jours"></app-stat-card>
+        </ng-template>
+    </div>
+
+    <!-- Charts & Activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Analytics Section -->
+        <div class="lg:col-span-8 space-y-8">
+            <div *ngIf="isLoading" class="glass-card h-[400px] rounded-2xl animate-pulse"></div>
+            <app-participation-chart *ngIf="!isLoading"
+                [data]="stats?.participation_trend || []"></app-participation-chart>
+
+            <!-- Recent Activity Glass Container -->
+            <div class="glass-card rounded-2xl overflow-hidden flex flex-col">
+                <div class="p-6 border-b border-border/40 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold">Activité Récente</h3>
+                        <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-1">Dernières
+                            interactions</p>
+                    </div>
+                    <button routerLink="/dashboard/participants"
+                        class="text-xs font-bold text-accent hover:underline flex items-center gap-1">
+                        Voir tout <lucide-icon name="arrow-right" class="h-3 w-3"></lucide-icon>
+                    </button>
+                </div>
+
+                <div class="divide-y divide-border/30 min-h-[360px]">
+                    <div *ngIf="isLoading" class="p-6 space-y-6">
+                        <div *ngFor="let i of [1,2,3,4]" class="flex items-center gap-4 animate-pulse">
+                            <div class="h-12 w-12 bg-muted rounded-full"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 w-1/3 bg-muted rounded-md"></div>
+                                <div class="h-3 w-1/4 bg-muted rounded-md"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!isLoading && recentActivity.length === 0"
+                        class="flex flex-col items-center justify-center p-20 text-center space-y-4">
+                        <div class="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center">
+                            <lucide-icon name="clock" class="h-8 w-8 text-muted-foreground/30"></lucide-icon>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-foreground">Aucun mouvement récent</p>
+                            <p class="text-xs text-muted-foreground mt-1">Les nouvelles inscriptions apparaîtront ici en
+                                temps réel.</p>
+                        </div>
+                    </div>
+
+                    <div *ngFor="let act of recentActivity"
+                        class="p-5 flex items-center justify-between hover:bg-accent/5 transition-all group">
+                        <div class="flex items-center gap-5 min-w-0">
+                            <div
+                                class="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center border border-border/50 text-accent font-black text-xs overflow-hidden shrink-0">
+                                <img *ngIf="act.avatar_url" [src]="act.avatar_url" class="h-full w-full object-cover">
+                                <span *ngIf="!act.avatar_url">{{ getInitials(act.full_name) }}</span>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-foreground">
+                                    {{ act.full_name || act.email }}
+                                </p>
+                                <p
+                                    class="text-[11px] text-muted-foreground flex items-center gap-1.5 mt-0.5 font-medium uppercase tracking-tight">
+                                    <span class="text-accent/80">Inscription</span>
+                                    <span class="text-muted-foreground/30">•</span>
+                                    <span class="truncate max-w-[150px] sm:max-w-xs">{{ act.event_title }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <p class="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                                {{ formatDate(act.registered_at) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Highlights -->
+        <div class="lg:col-span-4 space-y-8">
+
+            <!-- Upcoming Events Card -->
+            <div class="glass-card rounded-2xl flex flex-col overflow-hidden max-h-[800px]">
+                <div class="p-6 border-b border-border/40">
+                    <h3 class="text-xl font-bold">Événements Proches</h3>
+                    <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-1">Timeline
+                        critique</p>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-5 space-y-5">
+                    <div *ngIf="isLoadingEvents" class="space-y-6">
+                        <div *ngFor="let i of [1,2,3,4,5]" class="flex items-center gap-4 animate-pulse">
+                            <div class="h-14 w-14 bg-muted rounded-2xl"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 w-1/2 bg-muted rounded-md"></div>
+                                <div class="h-3 w-1/3 bg-muted rounded-md"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!isLoadingEvents && upcomingEvents.length === 0"
+                        class="p-12 text-center flex flex-col items-center">
+                        <div class="w-14 h-14 bg-accent/5 rounded-2xl flex items-center justify-center mb-4">
+                            <lucide-icon name="calendar" class="h-7 w-7 text-accent/30"></lucide-icon>
+                        </div>
+                        <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest">Planning Vide</p>
+                        <button routerLink="/dashboard/events"
+                            class="mt-6 text-[11px] font-black uppercase text-accent hover:underline">Planifier
+                            maintenant</button>
+                    </div>
+
+                    <div *ngFor="let event of upcomingEvents"
+                        class="group flex items-center gap-5 p-3 rounded-2xl border border-transparent hover:border-border/30 hover:bg-background/40 transition-all cursor-pointer">
+                        <div
+                            class="h-14 w-14 shrink-0 rounded-2xl bg-white border border-border/50 shadow-sm flex flex-col items-center justify-center transition-transform group-hover:scale-105">
+                            <span class="text-xs font-black text-accent uppercase">{{ formatMonthShort(event.event_date)
+                                }}</span>
+                            <span class="text-xl font-black text-foreground leading-none">{{ formatDay(event.event_date)
+                                }}</span>
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-black truncate group-hover:text-accent transition-colors">{{
+                                event.title }}</h4>
+                            <div class="mt-1.5 flex items-center gap-3">
+                                <div class="flex items-center gap-1 text-[10px] font-bold text-muted-foreground">
+                                    <lucide-icon name="users" class="h-3 w-3"></lucide-icon>
+                                    {{ event.participant_count }}/{{ event.capacity }}
+                                </div>
+                                <div [ngClass]="event.participant_count >= event.capacity ? 'bg-destructive/15 text-destructive' : 'bg-emerald-500/15 text-emerald-600'"
+                                    class="text-[9px] font-black uppercase tracking-tighter px-2.5 py-1 rounded-lg">
+                                    {{ event.participant_count >= event.capacity ? 'Plein' : (event.capacity -
+                                    event.participant_count) + ' places' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-accent/5 border-t border-border/20">
+                    <a routerLink="/dashboard/events"
+                        class="text-[10px] font-black uppercase tracking-widest text-accent hover:text-accent/80 block text-center transition-all">
+                        Gérer mes événements
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Tips Card -->
+            <div
+                class="bg-primary p-6 rounded-2xl text-white shadow-xl shadow-primary/20 relative overflow-hidden group">
+                <div
+                    class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700">
+                </div>
+                <div class="relative z-10">
+                    <h4 class="text-sm font-black uppercase tracking-widest mb-3 opacity-80">Astuce Pro</h4>
+                    <p class="text-sm font-medium leading-relaxed">
+                        Augmentez votre visibilité en ajoutant des descriptions détaillées et des catégories précises à
+                        vos événements.
+                    </p>
+                    <div class="mt-5 flex items-center gap-2 text-xs font-bold text-accent">
+                        <span>En savoir plus</span>
+                        <lucide-icon name="arrow-right" class="h-3 w-3"></lucide-icon>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

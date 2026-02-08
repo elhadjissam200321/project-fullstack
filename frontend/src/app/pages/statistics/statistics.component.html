@@ -1,0 +1,125 @@
+<div class="space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-500">
+    <div>
+        <h1 class="text-3xl font-bold tracking-tight">Statistiques</h1>
+        <p class="text-muted-foreground mt-1">
+            Analysez les performances de vos événements
+        </p>
+    </div>
+
+    <!-- Overview Stats -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ng-container *ngIf="isLoading; else statsLoaded">
+            <div *ngFor="let i of [1,2,3,4]" class="bg-card rounded-xl p-6 border border-border animate-pulse h-32">
+            </div>
+        </ng-container>
+
+        <ng-template #statsLoaded>
+            <app-stat-card title="Total événements" [value]="stats?.total_events || 0" iconName="calendar" [delay]="0">
+            </app-stat-card>
+            <app-stat-card title="Participants uniques" [value]="stats?.total_participants || 0" iconName="users"
+                [delay]="100">
+            </app-stat-card>
+            <app-stat-card title="Taux de remplissage" [value]="utilizationRate + '%'" iconName="bar-chart-3"
+                [delay]="200">
+            </app-stat-card>
+            <app-stat-card title="Inscriptions (7j)" [value]="stats?.participation_trend?.length ? getTrendSum() : 0"
+                iconName="trending-up" [delay]="300">
+            </app-stat-card>
+        </ng-template>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid gap-6 lg:grid-cols-2">
+        <!-- Participation Trend Chart -->
+        <div class="bg-card rounded-xl border border-border shadow-sm overflow-hidden h-full">
+            <div class="p-6">
+                <h3 class="text-lg font-semibold">Évolution des inscriptions</h3>
+                <p class="text-sm text-muted-foreground">Nouvelles inscriptions sur 7 jours</p>
+            </div>
+            <div class="p-6 pt-0">
+                <div class="h-[300px] w-full relative">
+                    <ng-container *ngIf="isLoading; else chartReady">
+                        <div class="h-full w-full bg-muted rounded animate-pulse"></div>
+                    </ng-container>
+                    <ng-template #chartReady>
+                        <app-participation-chart [data]="stats?.participation_trend || []"></app-participation-chart>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capacity Pie Chart -->
+        <div class="bg-card rounded-xl border border-border shadow-sm overflow-hidden h-full">
+            <div class="p-6">
+                <h3 class="text-lg font-semibold">Capacité globale</h3>
+                <p class="text-sm text-muted-foreground">Taux d'occupation de tous les événements</p>
+            </div>
+            <div class="p-6 pt-0">
+                <div class="h-[300px] flex items-center justify-center relative">
+                    <div *ngIf="totalCapacity > 0"
+                        class="w-48 h-48 rounded-full border-[20px] border-muted relative flex items-center justify-center"
+                        [style.border-color]="utilizationRate > 90 ? 'hsl(var(--destructive) / 0.1)' : 'hsl(var(--accent) / 0.1)'">
+
+                        <!-- Semi-circle or simplified pie visualization -->
+                        <div class="absolute inset-[-20px] rounded-full border-[20px] border-accent"
+                            [style.clip-path]="'polygon(50% 50%, 50% 0%, ' + (utilizationRate > 50 ? '100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%' : '100% 0%, 100% ' + (utilizationRate * 2) + '%') + ')'"
+                            *ngIf="utilizationRate > 0">
+                        </div>
+
+                        <div class="text-center">
+                            <span class="text-3xl font-bold">{{ utilizationRate }}%</span>
+                            <p class="text-xs text-muted-foreground">Occupe</p>
+                        </div>
+                    </div>
+
+                    <div *ngIf="totalCapacity === 0" class="text-center text-muted-foreground">
+                        <svg class="mx-auto h-12 w-12 mb-2 opacity-50" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        <p>Aucune donnée disponible</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-6 mt-4">
+                    <div class="flex items-center gap-2">
+                        <div class="h-3 w-3 rounded-full bg-accent"></div>
+                        <span class="text-sm text-muted-foreground">
+                            Inscrits ({{ totalRegistrations }})
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="h-3 w-3 rounded-full bg-muted"></div>
+                        <span class="text-sm text-muted-foreground">
+                            Disponible ({{ totalCapacity - totalRegistrations }})
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Capacity list (instead of complex bar chart) -->
+    <div *ngIf="capacityData.length > 0" class="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-lg font-semibold">Remplissage par événement</h3>
+            <p class="text-sm text-muted-foreground">Nombre de participants par événement</p>
+        </div>
+        <div class="px-6 pb-6">
+            <div class="space-y-6">
+                <div *ngFor="let item of capacityData" class="space-y-2">
+                    <div class="flex justify-between text-sm font-medium">
+                        <span>{{ item.name }}</span>
+                        <span>{{ item.participants }} / {{ item.capacity }} places</span>
+                    </div>
+                    <div class="h-2 w-full bg-muted rounded-full overflow-hidden">
+                        <div class="h-full bg-accent transition-all duration-500" [style.width.%]="item.percent"
+                            [ngClass]="item.percent >= 90 ? 'bg-red-500' : 'bg-accent'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,275 @@
+/* 
+ * EventFlow Design System
+ * Professional SaaS-style dashboard inspired by Meetup
+ * Neutral palette with coral accent color
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Neutral base - clean whites and grays */
+        --background: 0 0% 98%;
+        --foreground: 220 15% 15%;
+
+        /* Cards with subtle warmth */
+        --card: 0 0% 100%;
+        --card-foreground: 220 15% 15%;
+
+        --popover: 0 0% 100%;
+        --popover-foreground: 220 15% 15%;
+
+        /* Primary - Deep navy for professionalism */
+        --primary: 220 45% 20%;
+        --primary-foreground: 0 0% 100%;
+
+        /* Secondary - Soft gray */
+        --secondary: 220 10% 94%;
+        --secondary-foreground: 220 15% 25%;
+
+        /* Muted tones */
+        --muted: 220 10% 96%;
+        --muted-foreground: 220 10% 45%;
+
+        /* Accent - Coral/terracotta for warmth */
+        --accent: 15 85% 55%;
+        --accent-foreground: 0 0% 100%;
+
+        /* Success green */
+        --success: 152 55% 42%;
+        --success-foreground: 0 0% 100%;
+
+        /* Warning amber */
+        --warning: 38 92% 50%;
+        --warning-foreground: 0 0% 10%;
+
+        /* Destructive */
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 100%;
+
+        /* Borders and inputs */
+        --border: 220 13% 90%;
+        --input: 220 13% 90%;
+        --ring: 15 85% 55%;
+
+        --radius: 0.5rem;
+
+        /* Sidebar - slightly darker for hierarchy */
+        --sidebar-background: 220 15% 12%;
+        --sidebar-foreground: 220 10% 85%;
+        --sidebar-primary: 15 85% 55%;
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 220 15% 18%;
+        --sidebar-accent-foreground: 220 10% 95%;
+        --sidebar-border: 220 15% 20%;
+        --sidebar-ring: 15 85% 55%;
+
+        /* Chart colors */
+        --chart-1: 15 85% 55%;
+        --chart-2: 220 45% 40%;
+        --chart-3: 152 55% 42%;
+        --chart-4: 38 92% 50%;
+        --chart-5: 280 60% 55%;
+
+        /* Custom gradients */
+        --gradient-hero: linear-gradient(135deg, hsl(220 45% 20%) 0%, hsl(220 45% 35%) 100%);
+        --gradient-accent: linear-gradient(135deg, hsl(15 85% 55%) 0%, hsl(25 90% 60%) 100%);
+        --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 10% 98%) 100%);
+    }
+
+    .dark {
+        --background: 220 15% 8%;
+        --foreground: 220 10% 95%;
+
+        --card: 220 15% 12%;
+        --card-foreground: 220 10% 95%;
+
+        --popover: 220 15% 12%;
+        --popover-foreground: 220 10% 95%;
+
+        --primary: 0 0% 100%;
+        --primary-foreground: 220 15% 12%;
+
+        --secondary: 220 15% 18%;
+        --secondary-foreground: 220 10% 90%;
+
+        --muted: 220 15% 18%;
+        --muted-foreground: 220 10% 60%;
+
+        --accent: 15 85% 55%;
+        --accent-foreground: 0 0% 100%;
+
+        --success: 152 55% 42%;
+        --success-foreground: 0 0% 100%;
+
+        --warning: 38 92% 50%;
+        --warning-foreground: 0 0% 10%;
+
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 100%;
+
+        --border: 220 15% 20%;
+        --input: 220 15% 20%;
+        --ring: 15 85% 55%;
+
+        --sidebar-background: 220 15% 6%;
+        --sidebar-foreground: 220 10% 85%;
+        --sidebar-primary: 15 85% 55%;
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 220 15% 12%;
+        --sidebar-accent-foreground: 220 10% 95%;
+        --sidebar-border: 220 15% 15%;
+        --sidebar-ring: 15 85% 55%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground antialiased;
+        font-family: 'Inter', 'Source Sans 3', system-ui, sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: 'Inter', system-ui, sans-serif;
+        @apply font-semibold tracking-tight;
+    }
+}
+
+@layer components {
+
+    /* Glassmorphism utility */
+    .glass {
+        @apply bg-background/70 backdrop-blur-md border border-border/50;
+    }
+
+    .glass-card {
+        @apply bg-card/80 backdrop-blur-lg border border-border/50 shadow-sm hover:shadow-md transition-all duration-300;
+    }
+
+    /* Subtle hover transitions */
+    .hover-lift {
+        @apply transition-all duration-300 cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hover-lift:hover {
+        @apply -translate-y-1 shadow-xl;
+    }
+
+    /* Card hover effect */
+    .card-hover {
+        @apply transition-all duration-300 ease-in-out border-border relative overflow-hidden;
+    }
+
+    .card-hover::after {
+        content: '';
+        @apply absolute inset-0 opacity-0 bg-gradient-to-br from-accent/5 to-transparent transition-opacity duration-300;
+    }
+
+    .card-hover:hover {
+        @apply border-accent/40 shadow-lg scale-[1.01];
+    }
+
+    .card-hover:hover::after {
+        @apply opacity-100;
+    }
+
+    /* Smooth page transitions */
+    .page-enter {
+        animation: pageEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes pageEnter {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Stat card animation */
+    .stat-animate {
+        animation: statPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        opacity: 0;
+    }
+
+    @keyframes statPop {
+        0% {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* Input focus ring */
+    .input-focus {
+        @apply focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all duration-200;
+    }
+
+    /* Button states */
+    .btn-primary {
+        @apply bg-primary text-primary-foreground hover:bg-primary/90 active:scale-[0.97] transition-all duration-200 shadow-sm hover:shadow-md;
+    }
+
+    .btn-accent {
+        @apply bg-accent text-accent-foreground hover:bg-accent/90 active:scale-[0.97] transition-all duration-200 shadow-accent/20 hover:shadow-lg hover:shadow-accent/30;
+    }
+
+    .btn-ghost {
+        @apply hover:bg-secondary active:bg-secondary/80 transition-all duration-200;
+    }
+
+    /* Badge variants */
+    .badge-success {
+        @apply bg-success/10 text-success border-success/30 px-2 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    .badge-warning {
+        @apply bg-warning/10 text-warning border-warning/30 px-2 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    .badge-accent {
+        @apply bg-accent/10 text-accent border-accent/30 px-2 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    /* Gradient Text */
+    .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+    }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-muted/30;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full border-2 border-transparent bg-clip-content;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+}

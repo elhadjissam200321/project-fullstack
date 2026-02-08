@@ -1,0 +1,171 @@
+<div class="min-h-screen flex items-center justify-center bg-background p-4 py-12">
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-accent">EventFlow</h1>
+        </div>
+
+        <!-- Register Card -->
+        <div class="bg-card rounded-lg shadow-soft border border-border overflow-hidden">
+            <!-- Header -->
+            <div class="p-6 text-center border-b border-border">
+                <h2 class="text-2xl font-semibold text-foreground">Créer un compte</h2>
+                <p class="text-muted-foreground mt-2">
+                    Rejoignez EventFlow pour gérer ou participer à des événements
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-6">
+                <div class="space-y-4">
+                    <!-- Full Name -->
+                    <div class="space-y-2">
+                        <label for="fullName" class="block text-sm font-medium text-foreground">
+                            Nom complet
+                        </label>
+                        <input id="fullName" type="text" formControlName="fullName" placeholder="Jean Dupont"
+                            class="w-full px-4 py-2 rounded-lg border border-input bg-background text-foreground input-focus"
+                            [class.border-destructive]="fullName?.invalid && fullName?.touched" />
+                        <p *ngIf="fullName?.invalid && fullName?.touched" class="text-sm text-destructive">
+                            <span *ngIf="fullName?.errors?.['required']">Le nom est requis</span>
+                            <span *ngIf="fullName?.errors?.['minlength']">Le nom doit contenir au moins 2
+                                caractères</span>
+                        </p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label for="email" class="block text-sm font-medium text-foreground">
+                            Email
+                        </label>
+                        <input id="email" type="email" formControlName="email" placeholder="votre@email.com"
+                            class="w-full px-4 py-2 rounded-lg border border-input bg-background text-foreground input-focus"
+                            [class.border-destructive]="email?.invalid && email?.touched" />
+                        <p *ngIf="email?.invalid && email?.touched" class="text-sm text-destructive">
+                            <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+                            <span *ngIf="email?.errors?.['email']">Adresse email invalide</span>
+                        </p>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="space-y-2">
+                        <label for="password" class="block text-sm font-medium text-foreground">
+                            Mot de passe
+                        </label>
+                        <input id="password" type="password" formControlName="password" placeholder="••••••••"
+                            class="w-full px-4 py-2 rounded-lg border border-input bg-background text-foreground input-focus"
+                            [class.border-destructive]="password?.invalid && password?.touched" />
+                        <p *ngIf="password?.invalid && password?.touched" class="text-sm text-destructive">
+                            <span *ngIf="password?.errors?.['required']">Le mot de passe est requis</span>
+                            <span *ngIf="password?.errors?.['minlength']">Le mot de passe doit contenir au moins 6
+                                caractères</span>
+                        </p>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="space-y-2">
+                        <label for="confirmPassword" class="block text-sm font-medium text-foreground">
+                            Confirmer le mot de passe
+                        </label>
+                        <input id="confirmPassword" type="password" formControlName="confirmPassword"
+                            placeholder="••••••••"
+                            class="w-full px-4 py-2 rounded-lg border border-input bg-background text-foreground input-focus"
+                            [class.border-destructive]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)" />
+                        <p *ngIf="confirmPassword?.touched && registerForm.errors?.['passwordMismatch']"
+                            class="text-sm text-destructive">
+                            Les mots de passe ne correspondent pas
+                        </p>
+                    </div>
+
+                    <!-- Security Question -->
+                    <div class="space-y-4 pt-4 border-t border-border">
+                        <h3 class="text-sm font-semibold text-foreground">Sécurité du compte</h3>
+
+                        <div class="space-y-2">
+                            <label for="secretQuestion" class="block text-sm font-medium text-foreground">
+                                Question secrète
+                            </label>
+                            <select id="secretQuestion" formControlName="secretQuestion"
+                                class="w-full px-4 py-2 rounded-lg border border-input bg-background text-foreground input-focus">
+                                <option *ngFor="let q of securityQuestions" [value]="q">{{ q }}</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="secretAnswer" class="block text-sm font-medium text-foreground">
+                                Votre réponse
+                            </label>
+                            <input id="secretAnswer" type="text" formControlName="secretAnswer"
+                                placeholder="Ma réponse..."
+                                class="w-full px-4 py-2 rounded-lg border border-input bg-background text-foreground input-focus"
+                                [class.border-destructive]="registerForm.get('secretAnswer')?.invalid && registerForm.get('secretAnswer')?.touched" />
+                            <p class="text-xs text-muted-foreground">
+                                Cette question sera utilisée si vous oubliez votre mot de passe.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Role Selection -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-medium text-foreground">
+                            Type de compte
+                        </label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Participant Option -->
+                            <div (click)="setRole('participant')" [class]="selectedRole === 'participant' 
+                  ? 'border-accent bg-accent/5' 
+                  : 'border-border hover:border-muted-foreground/30'"
+                                class="relative flex items-center rounded-lg border-2 p-4 cursor-pointer transition-all">
+                                <div class="w-full">
+                                    <div class="font-medium">Participant</div>
+                                    <div class="text-xs text-muted-foreground">Inscrivez-vous aux événements</div>
+                                </div>
+                            </div>
+
+                            <!-- Organisateur Option -->
+                            <div (click)="setRole('organisateur')" [class]="selectedRole === 'organisateur' 
+                  ? 'border-accent bg-accent/5' 
+                  : 'border-border hover:border-muted-foreground/30'"
+                                class="relative flex items-center rounded-lg border-2 p-4 cursor-pointer transition-all">
+                                <div class="w-full">
+                                    <div class="font-medium">Organisateur</div>
+                                    <div class="text-xs text-muted-foreground">Créez et gérez des événements</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div *ngIf="errorMessage" class="bg-destructive/10 border border-destructive/20 rounded-lg p-3">
+                        <p class="text-sm text-destructive">{{ errorMessage }}</p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-6 space-y-4">
+                    <!-- Submit Button -->
+                    <button type="submit" [disabled]="isLoading"
+                        class="w-full btn-accent px-4 py-2 rounded-lg font-medium flex items-center justify-center">
+                        <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        S'inscrire
+                    </button>
+
+                    <!-- Login Link -->
+                    <p class="text-center text-sm text-muted-foreground">
+                        Déjà un compte ?
+                        <a routerLink="/login" class="font-medium text-accent hover:underline">
+                            Se connecter
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
